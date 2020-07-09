@@ -1,10 +1,9 @@
-EditDistinct 裡面有 3 個 public method
+EditDistinct 裡面有 2 個 public method
 init_table, get_table, evaluate 三個
 
-evaluate(str1, str2, a, b) 應該要用丟四個參數進去
+evaluate(str1, str2) 應該要用丟兩個個參數進去
 前面兩個是要被比較的字串
-a, b 分別是 str1 與 str2 的字串長度
-會回傳他們的 Edit Distinct
+分別是 str1 與 str2 兩個字串
 
 init_table(str1, str2) 
 只要丟兩個要比較字串得進去就可以初始化了
