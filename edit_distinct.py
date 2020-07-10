@@ -5,7 +5,7 @@ class EditDistinct():
     def __init__(self):
         self.table = None
 
-    def __init_table(self, target, compared):
+    def __init_table(self, target: str, compared: str) -> None:
         '''
         if you want to get table\n
         you need to call this function before you calculate\n
@@ -13,17 +13,17 @@ class EditDistinct():
         '''
         self.table = np.zeros((len(target)+1, len(compared)+1))
 
-    def __minimize(self, a, b, c):
+    def __minimize(self, a: int, b: int, c: int) -> int:
         arr = np.array([a, b, c], dtype="int64")
         return min(arr)
 
-    def get_table(self):
+    def get_table(self) -> np.array:
         '''
         return the minimize table back
         '''
         return self.table
 
-    def __calculate(self, target, compared, x, y):
+    def __calculate(self, target: str, compared: str, x: int, y: int) -> int:
         '''
         target, compared => string\n
         x, y => len of target and len of compared\n
@@ -51,7 +51,7 @@ class EditDistinct():
                     target, compared, x, y - 1), self.__calculate(target, compared, x - 1, y - 1))+1
             return self.__minimize(self.__calculate(target, compared, x - 1, y), self.__calculate(target, compared, x, y - 1), self.__calculate(target, compared, x - 1, y - 1)) + 1
     
-    def evaluate(self, target, compared):
+    def evaluate(self, target: str, compared: str) -> int:
         self.__init_table(target, compared)
         len1 = len(target)
         len2 = len(compared)

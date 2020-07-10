@@ -6,3 +6,10 @@ evaluate(str1, str2) 應該要用丟兩個個參數進去
 分別是 str1 與 str2 兩個字串
 
 get_table 會回傳 minimize table
+
+
+There are two public method in EditDistinct() this class
+
+evaluate(str1, str2) will return the minimize step between one string convert to another string
+get_table will return a numpy.array back
+it will be the table that record minimize step in calculate
