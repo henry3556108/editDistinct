@@ -3,58 +3,47 @@ import numpy as np
 
 class EditDistinct():
     def __init__(self):
-        self.max = 0
-        self.min = 99999
-    def __minimize(self, a, b, c):
+        self.distinct = 0
+        self.table = None
+
+    def init_table(self, str1, str2):
+        self.table = np.zeros((len(str1), len(str2)))
+
+    def __minimize(self, a, b=9999, c=9999):
         arr = np.array([a, b, c], dtype="int64")
         return min(arr)
-    def start(self, s1, s2):
-        self.max = len(s1) if len(s1) > len(s2) else len(s2)
-        self.min = len(s1) if len(s1) > len(s2) else len(s2)
-        self.evaluate(s1, s2)
-        return self.min
-    def evaluate(self, s1: str, s2: str, step: int = 0) -> int:
-        '''
-        s1, s2 => string\n
-        will return these two string's Edit Distinct back
-        '''
-        if self.max < len(s1):
-            self.max = len(s1)
-        if self.max < len(s2):
-            self.max = len(s2)
 
-        if step >= self.min:
-            return self.min
+    def start(self, str1, str2):
+        str1 = " " + str1
+        str2 = " " + str2
+        self.init_table(str1, str2)
+        return int(self.evaluate(str1, str2))
+
+    def evaluate(self, str1, str2):
+        for str1_pos in range(len(str1)):
+            for str2_pos in range(len(str2)):
+                if str1_pos == 0 and str2_pos != 0:
+                    mini = self.__minimize(self.table[str1_pos][str2_pos - 1])
+                elif str1_pos != 0 and str2_pos == 0:
+                    mini = self.__minimize(self.table[str1_pos - 1][str2_pos])
+                elif str1_pos == 0 and str2_pos == 0:
+                    mini = 0
+                else:
+                    add = self.table[str1_pos][str2_pos - 1]
+                    repl = self.table[str1_pos - 1][str2_pos - 1]
+                    delete = self.table[str1_pos - 1][str2_pos]                
+                    mini = self.__minimize(add, delete, repl)
+                if str1[str1_pos] == str2[str2_pos]:
+                    mini = self.table[str1_pos - 1][str2_pos - 1]
+                if str1[str1_pos] != str2[str2_pos]:
+                    mini += 1
+                self.table[str1_pos][str2_pos] = mini
+        return self.table[str1_pos][str2_pos]
         
-        print(s1, s2, step, self.min)
-        if step >= self.max:
-            return self.max
-        if len(s1) == 0:
-            step += len(s2)
-            if self.min > step:
-                self.min = step
-            return step if step < self.max else self.max
 
-        if len(s2) == 0:
-            step += len(s1)
-            if self.min > step:
-                self.min = step
-            return step if step < self.max else self.max
+ed = EditDistinct()
 
-        if s1[0] == s2[0]:
-            return self.evaluate(s1[1:], s2[1:], step)
-            
-        else:
-            step += 1
-            self.evaluate(s1[1:], s2[:], step)
-            self.evaluate(s1[:], s2[1:], step)
-            self.evaluate(s1[1:], s2[1:], step)
+str1 = "聯式發票收銀機發票區聯式日"
+str2 = "二聯式發票、收銀機發票(二聯式)"
 
-def main():
-    edit_distinct = EditDistinct()    
-    str1 = "聯式發票收銀機發票區聯式日"
-    str2 = "二聯式發票、收銀機發票(二聯式)"
-    print(edit_distinct.start(str1, str2))
-
-if __name__ == "__main__":
-    main()
+print(ed.start(str1, str2))
